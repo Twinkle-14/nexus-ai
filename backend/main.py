@@ -3,6 +3,7 @@ from sqlalchemy import text
 from app.database import engine
 from routes import services, incidents, chaos_experiments, cost_reports
 from app.aws_scanner import run_full_scan
+from app.secret_scanner import scan_directory
 
 app = FastAPI(title="Nexus AI Backend")
 
@@ -27,3 +28,8 @@ def db_check():
 @app.get("/aws-scan")
 def aws_scan():
     return run_full_scan()
+
+
+@app.get("/secret-scan")
+def secret_scan():
+    return scan_directory("/home/twinkle_14/projects/nexus-ai")
