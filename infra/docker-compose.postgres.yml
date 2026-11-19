@@ -1,0 +1,21 @@
+# Optional local PostgreSQL only. Skip this when using your existing Neon database.
+services:
+  nexus-postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nexus_ai
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: change-this-local-password
+    ports:
+      - "5433:5432"
+    volumes:
+      - nexus-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus -d nexus_ai"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  nexus-postgres-data:

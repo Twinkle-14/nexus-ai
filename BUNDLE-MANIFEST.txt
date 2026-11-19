@@ -1,0 +1,30 @@
+Nexus AI consolidated demo project
+
+Frontend:
+- React + TypeScript + Vite full app
+- Dashboard plus Chaos Lab, Multi-Region Failover, Cost Intelligence,
+  AI Root Cause, and Secret Scanner screens
+- Shared API client with HTTP/network error reporting
+
+Backend:
+- FastAPI application and SQLAlchemy models/routes
+- Local SQLite fallback and PostgreSQL/Neon support
+- Chaos Mesh PodChaos integration restricted to demo-web-app
+- Mumbai/Virginia service registry + failover state workflow
+- AWS EC2/EBS read-only resource scan and manual cost register
+- Ollama AI incident investigation with Prometheus metrics snapshot
+- Secret scanner with relative file paths and line numbers; values redacted
+- Optional endpoint health monitor (database status promotion only)
+
+Infrastructure:
+- Separate demo-web-app Dockerfile and Kubernetes Deployment/Service
+- Backend Dockerfile
+- Optional PostgreSQL Docker Compose file
+- Prometheus Helm setup notes
+- GitHub Actions CI workflow
+
+Intentionally excluded:
+- backend/.env and all credentials
+- .git repository metadata
+- Python virtual environment
+- node_modules and frontend dist
