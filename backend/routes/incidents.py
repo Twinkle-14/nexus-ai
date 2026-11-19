@@ -9,6 +9,7 @@ from app.models import Incident, Service
 from app.schemas import IncidentCreate, IncidentResponse
 from app.ai_engine import analyze_incident
 from app.prometheus_client import get_real_metrics_summary
+from app.demo_mode import require_local_cluster
 
 router = APIRouter(prefix="/incidents", tags=["Incidents"])
 LEGACY_PAYMENT_PLACEHOLDER = "Payment API returning 500 errors intermittently"
@@ -19,6 +20,7 @@ def _dump_model(model):
 
 
 def _run_analysis(incident: Incident, db: Session):
+    require_local_cluster("AI Root Cause Analysis")
     metrics = get_real_metrics_summary("demo-web-app")
     try:
         ai_result = analyze_incident(
@@ -110,6 +112,7 @@ def delete_legacy_payment_placeholder(db: Session = Depends(get_db)):
 @router.post("/scan-and-investigate")
 def scan_and_investigate(incident: IncidentCreate, db: Session = Depends(get_db)):
     """Create the incident, collect telemetry, and return its AI report in one request."""
+    require_local_cluster("AI Root Cause Analysis")
     service = db.query(Service).filter(Service.id == incident.service_id).first()
     if not service:
         raise HTTPException(status_code=404, detail="Selected application was not found")

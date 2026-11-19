@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models import ChaosExperiment, Service, Incident
 from app.schemas import ChaosExperimentCreate, ChaosExperimentResponse
 from app.chaos_engine import get_demo_web_app_status, run_pod_kill
+from app.demo_mode import require_local_cluster
 
 router = APIRouter(prefix="/chaos-experiments", tags=["Chaos Experiments"])
 DEMO_NAME = "demo-web-app"
@@ -51,6 +52,7 @@ def list_experiments(db: Session = Depends(get_db)):
 
 @router.get("/demo/status")
 def demo_app_status():
+    require_local_cluster("Chaos Lab")
     try:
         return get_demo_web_app_status()
     except RuntimeError as exc:
@@ -98,6 +100,7 @@ def run_experiment(target_deployment: str, db: Session = Depends(get_db)):
     if target_deployment != DEMO_NAME:
         raise HTTPException(status_code=400, detail="Chaos Lab can target only demo-web-app in the default namespace.")
 
+    require_local_cluster("Chaos Lab")
     service = _get_or_create_demo_service(db)
     try:
         result = run_pod_kill(DEMO_NAME, "default")
