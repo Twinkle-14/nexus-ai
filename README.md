@@ -1,5 +1,3 @@
-cd "/mnt/c/Users/Twinkle/Desktop/Nexus AI"
-cat > README.md << 'EOF'
 # Nexus AI — Break it. Watch it heal itself.
 
 An AI-powered cloud resilience platform: break an application on purpose, watch Kubernetes recover it, fail over between regions, and get an AI-written root-cause report grounded in real metrics.
