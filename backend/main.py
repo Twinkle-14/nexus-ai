@@ -21,6 +21,7 @@ from app import models  # noqa: F401,E402 - register SQLAlchemy models
 from app.health_monitor import start_monitor, stop_monitor  # noqa: E402
 from app.aws_scanner import run_full_scan, get_cost_explorer_report  # noqa: E402
 from app.secret_scanner import scan_directory  # noqa: E402
+from app.demo_mode import block_in_demo  # noqa: E402
 from routes import services, incidents, chaos_experiments, cost_reports  # noqa: E402
 
 
@@ -81,12 +82,14 @@ def db_check():
 
 @app.get("/aws-scan")
 def aws_scan():
+    block_in_demo("Cost Intelligence", "it would need real AWS credentials, and this public demo does not store any. Run Nexus AI locally with your own AWS account to try it.")
     return run_full_scan()
 
 
 @app.get("/aws-costs")
 def aws_costs(force_refresh: bool = False):
     """Return actual AWS Cost Explorer spend, cached for 15 minutes by default."""
+    block_in_demo("Cost Intelligence", "it would need real AWS credentials, and this public demo does not store any. Run Nexus AI locally with your own AWS account to try it.")
     return get_cost_explorer_report(force_refresh=force_refresh)
 
 
